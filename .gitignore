@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Editors/IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Maven/Quarkus build output
+target/
+
+# Node/Vite (for future frontend module)
+node_modules/
+dist/
+
+# Java
+*.class
+
+CLAUDE.md
+.claude/
