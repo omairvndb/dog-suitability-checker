@@ -1,0 +1,26 @@
+services:
+
+  artemis:
+    image: apache/activemq-artemis:latest
+    container_name: artemis
+    ports:
+      - "8161:8161"   # Admin UI
+      - "5672:5672"   # AMQP
+    environment:
+      ARTEMIS_USER: artemis
+      ARTEMIS_PASSWORD: artemis
+
+  postgres:
+    image: postgres:latest
+    container_name: dogchecker-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dogchecker
+      POSTGRES_PASSWORD: dogchecker
+      POSTGRES_DB: dogchecker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
