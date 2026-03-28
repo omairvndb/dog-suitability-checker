@@ -13,9 +13,15 @@ function ResultCard({ result }) {
       <div className="result-suitability">{result.suitability}</div>
       <div className="result-details">
         <span>
-          <strong>{result.breed}</strong> in <strong>{result.city}</strong>
+          <strong>{result.matchedBreed || result.breed}</strong> in{" "}
+          <strong>{result.matchedCity || result.city}</strong>
         </span>
       </div>
+      {result.temperature != null && (
+        <div className="result-weather">
+          {result.temperature}°C · {result.humidity}% humidity
+        </div>
+      )}
       <div className="result-reason">{result.reason}</div>
     </div>
   );

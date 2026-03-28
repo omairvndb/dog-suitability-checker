@@ -19,6 +19,14 @@ public class DogWeatherRequest extends PanacheEntity {
 
     public String reason;
 
+    public String matchedBreed;
+
+    public String matchedCity;
+
+    public Double temperature;
+
+    public Integer humidity;
+
     public LocalDateTime createdAt;
 
     public LocalDateTime updatedAt;

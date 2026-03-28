@@ -78,5 +78,9 @@ public class DogCheckerService {
             request.suitability = Suitability.valueOf(response.suitability());
         }
         request.reason = response.reason();
+        request.matchedBreed = response.matchedBreed();
+        request.matchedCity = response.matchedCity();
+        request.temperature = response.temperature();
+        request.humidity = response.humidity();
     }
 }

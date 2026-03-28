@@ -6,7 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherApiResponseDTO {
 
+    public Location location;
     public Current current;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Location {
+        public String name;
+        public String country;
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Current {

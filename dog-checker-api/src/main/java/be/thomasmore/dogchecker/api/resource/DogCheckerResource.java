@@ -54,7 +54,11 @@ public class DogCheckerResource {
                 request.city,
                 request.status.name(),
                 request.suitability != null ? request.suitability.name() : null,
-                request.reason
+                request.reason,
+                request.matchedBreed,
+                request.matchedCity,
+                request.temperature,
+                request.humidity
         );
     }
 }

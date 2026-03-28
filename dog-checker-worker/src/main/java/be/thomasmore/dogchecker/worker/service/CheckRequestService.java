@@ -44,7 +44,8 @@ public class CheckRequestService {
             List<DogApiResponseDTO> dogs = dogApiService.fetchBreed(request.breed());
             if (dogs == null || dogs.isEmpty()) {
                 emitter.send(new WorkerResponseDTO(request.requestId(), "FAILED",
-                        "Dog breed '" + request.breed() + "' not found."));
+                        "Dog breed '" + request.breed() + "' not found.",
+                        null, null, null, null));
                 return;
             }
             DogApiResponseDTO dog = dogs.get(0);
@@ -53,7 +54,8 @@ public class CheckRequestService {
             WeatherApiResponseDTO weather = weatherApiService.fetchWeather(request.city());
             if (weather == null || weather.current == null) {
                 emitter.send(new WorkerResponseDTO(request.requestId(), "FAILED",
-                        "City '" + request.city() + "' not found."));
+                        "City '" + request.city() + "' not found.",
+                        null, null, null, null));
                 return;
             }
 
@@ -64,12 +66,17 @@ public class CheckRequestService {
 
             registry.counter("dog.checks.processed", "suitability", result.suitability()).increment();
 
-            emitter.send(new WorkerResponseDTO(request.requestId(), result.suitability(), result.reason()));
+            String matchedCity = weather.location.name + ", " + weather.location.country;
+            emitter.send(new WorkerResponseDTO(
+                    request.requestId(), result.suitability(), result.reason(),
+                    dog.name, matchedCity,
+                    weather.current.tempC, weather.current.humidity));
 
         } catch (Exception e) {
             LOG.errorf("Error processing request %d: %s", request.requestId(), e.getMessage());
             emitter.send(new WorkerResponseDTO(request.requestId(), "FAILED",
-                    "An error occurred while processing the request."));
+                    "An error occurred while processing the request.",
+                    null, null, null, null));
         }
     }
 }
