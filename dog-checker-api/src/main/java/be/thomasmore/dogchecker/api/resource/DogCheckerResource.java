@@ -58,7 +58,8 @@ public class DogCheckerResource {
                 request.matchedBreed,
                 request.matchedCity,
                 request.temperature,
-                request.humidity
+                request.humidity,
+                request.breedInfo
         );
     }
 }

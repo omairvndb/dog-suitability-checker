@@ -7,5 +7,6 @@ public record WorkerResponseDTO(
         String matchedBreed,
         String matchedCity,
         Double temperature,
-        Integer humidity
+        Integer humidity,
+        DogBreedInfo breedInfo
 ) {}

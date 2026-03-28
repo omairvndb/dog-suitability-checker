@@ -82,5 +82,6 @@ public class DogCheckerService {
         request.matchedCity = response.matchedCity();
         request.temperature = response.temperature();
         request.humidity = response.humidity();
+        request.breedInfo = response.breedInfo();
     }
 }

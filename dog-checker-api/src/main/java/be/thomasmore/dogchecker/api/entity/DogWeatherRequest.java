@@ -1,5 +1,6 @@
 package be.thomasmore.dogchecker.api.entity;
 
+import be.thomasmore.dogchecker.api.dto.DogBreedInfo;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -26,6 +27,9 @@ public class DogWeatherRequest extends PanacheEntity {
     public Double temperature;
 
     public Integer humidity;
+
+    @Embedded
+    public DogBreedInfo breedInfo;
 
     public LocalDateTime createdAt;
 

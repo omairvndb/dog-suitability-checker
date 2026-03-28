@@ -10,5 +10,6 @@ public record ResultResponseDTO(
         String matchedBreed,
         String matchedCity,
         Double temperature,
-        Integer humidity
+        Integer humidity,
+        DogBreedInfo breedInfo
 ) {}
