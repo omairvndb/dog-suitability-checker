@@ -45,5 +45,13 @@ services:
     depends_on:
       - artemis
 
+  dog-checker-frontend:
+    build: ./dog-checker-frontend
+    container_name: dog-checker-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - dog-checker-api
+
 volumes:
   postgres_data:
