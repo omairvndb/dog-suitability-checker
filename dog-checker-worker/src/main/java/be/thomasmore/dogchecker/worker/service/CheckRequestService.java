@@ -5,6 +5,7 @@ import be.thomasmore.dogchecker.worker.dto.WeatherApiResponseDTO;
 import be.thomasmore.dogchecker.worker.dto.WorkerRequestDTO;
 import be.thomasmore.dogchecker.worker.dto.WorkerResponseDTO;
 import be.thomasmore.dogchecker.worker.service.SuitabilityService.SuitabilityResult;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -19,6 +20,9 @@ import java.util.List;
 public class CheckRequestService {
 
     private static final Logger LOG = Logger.getLogger(CheckRequestService.class);
+
+    @Inject
+    MeterRegistry registry;
 
     @Inject
     @RestClient
@@ -68,6 +72,11 @@ public class CheckRequestService {
             SuitabilityResult result = suitabilityService.evaluate(
                     dog.coatLength, dog.energy, weather.current.tempC);
         
+            // Increment the processed checks counter with the suitability as a tag
+            // This allows us to track how many checks resulted in each suitability category
+            // Example output: dog.checks.processed{Suitability=GOOD} 10, dog.checks.processed{Suitability=BAD} 5, etc.
+            registry.counter("dog.checks.processed", "suitability", result.suitability()).increment();
+
             emitter.send(new WorkerResponseDTO(request.requestId(), result.suitability(), result.reason()));
 
         } catch (Exception e) {
