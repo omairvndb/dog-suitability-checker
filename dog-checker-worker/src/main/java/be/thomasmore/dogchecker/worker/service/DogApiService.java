@@ -4,10 +4,13 @@ import be.thomasmore.dogchecker.worker.dto.DogApiResponseDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @ApplicationScoped
@@ -22,6 +25,8 @@ public class DogApiService {
     @ConfigProperty(name = "dogs.api.key")
     String apiKey;
 
+    @Timeout(value = 5, unit = ChronoUnit.SECONDS)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, delay = 10000) 
     @Retry(maxRetries = 3, delay = 1000)
     @Fallback(fallbackMethod = "fetchBreedFallback")
     public List<DogApiResponseDTO> fetchBreed(String breed) {
