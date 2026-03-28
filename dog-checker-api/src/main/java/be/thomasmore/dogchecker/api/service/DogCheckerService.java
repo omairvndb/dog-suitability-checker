@@ -1,16 +1,23 @@
 package be.thomasmore.dogchecker.api.service;
 
-import be.thomasmore.dogchecker.api.dto.CheckRequestDTO;
-import be.thomasmore.dogchecker.api.dto.WorkerRequestDTO;
-import be.thomasmore.dogchecker.api.entity.DogWeatherRequest;
-import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Status;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.jboss.logging.Logger;
+
+import be.thomasmore.dogchecker.api.dto.CheckRequestDTO;
+import be.thomasmore.dogchecker.api.dto.WorkerRequestDTO;
+import be.thomasmore.dogchecker.api.dto.WorkerResponseDTO;
+import be.thomasmore.dogchecker.api.entity.DogWeatherRequest;
+import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Status;
+import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Suitability;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class DogCheckerService {
+
+    private static final Logger LOG = Logger.getLogger(DogCheckerService.class);
 
     @Channel("check-request")
     Emitter<WorkerRequestDTO> emitter;
@@ -32,5 +39,25 @@ public class DogCheckerService {
 
     public DogWeatherRequest getResult(Long id) {
         return DogWeatherRequest.findById(id);
+    }
+
+    @Incoming("check-response")
+    @Transactional
+    public void processResponse(WorkerResponseDTO response) {
+        LOG.infof("Received response for request %d: %s", response.requestId(), response.suitability());
+
+        DogWeatherRequest request = DogWeatherRequest.findById(response.requestId());
+        if (request == null) {
+            LOG.errorf("Request %d not found", response.requestId());
+            return;
+        }
+
+        if ("FAILED".equals(response.suitability())) {
+            request.status = Status.FAILED;
+        } else {
+            request.status = Status.DONE;
+            request.suitability = Suitability.valueOf(response.suitability());
+        }
+        request.reason = response.reason();
     }
 }
