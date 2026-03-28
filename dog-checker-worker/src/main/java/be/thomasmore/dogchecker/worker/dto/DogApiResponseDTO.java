@@ -11,4 +11,7 @@ public class DogApiResponseDTO {
 
     @JsonProperty("coat_length")
     public int coatLength;
+
+    @JsonProperty("max_weight_male")
+    public double maxWeight;
 }

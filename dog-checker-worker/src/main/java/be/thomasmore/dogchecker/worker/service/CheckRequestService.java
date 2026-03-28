@@ -59,7 +59,8 @@ public class CheckRequestService {
 
             // Evaluate suitability
             SuitabilityResult result = suitabilityService.evaluate(
-                    dog.coatLength, dog.energy, weather.current.tempC);
+                    dog.coatLength, dog.energy, dog.maxWeight,
+                    weather.current.tempC, weather.current.humidity);
 
             registry.counter("dog.checks.processed", "suitability", result.suitability()).increment();
 
