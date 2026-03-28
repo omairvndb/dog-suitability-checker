@@ -3,7 +3,6 @@ package be.thomasmore.dogchecker.api.entity;
 import be.thomasmore.dogchecker.api.dto.DogBreedInfo;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class DogWeatherRequest extends PanacheEntity {
@@ -30,21 +29,6 @@ public class DogWeatherRequest extends PanacheEntity {
 
     @Embedded
     public DogBreedInfo breedInfo;
-
-    public LocalDateTime createdAt;
-
-    public LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
     public enum Status {
         PENDING, PROCESSING, DONE, FAILED

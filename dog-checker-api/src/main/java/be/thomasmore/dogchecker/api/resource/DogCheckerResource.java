@@ -1,8 +1,6 @@
 package be.thomasmore.dogchecker.api.resource;
 
 import be.thomasmore.dogchecker.api.dto.CheckRequestDTO;
-import be.thomasmore.dogchecker.api.dto.CheckResponseDTO;
-import be.thomasmore.dogchecker.api.dto.ResultResponseDTO;
 import be.thomasmore.dogchecker.api.entity.DogWeatherRequest;
 import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Status;
 import be.thomasmore.dogchecker.api.service.DogCheckerService;
@@ -20,27 +18,26 @@ public class DogCheckerResource {
 
     @POST
     @Path("/check")
-    public CheckResponseDTO check(CheckRequestDTO dto) {
+    public DogWeatherRequest check(CheckRequestDTO dto) {
         if (dto.breed() == null || dto.breed().isBlank() || dto.city() == null || dto.city().isBlank()) {
             throw new WebApplicationException("Both 'breed' and 'city' are required.", 400);
         }
-        DogWeatherRequest request = service.createCheck(dto);
-        return new CheckResponseDTO(request.id, request.status.name());
+        return service.createCheck(dto);
     }
 
     @GET
     @Path("/status/{id}")
-    public CheckResponseDTO status(@PathParam("id") Long id) {
+    public DogWeatherRequest status(@PathParam("id") Long id) {
         DogWeatherRequest request = service.getStatus(id);
         if (request == null) {
             throw new NotFoundException("Request not found");
         }
-        return new CheckResponseDTO(request.id, request.status.name());
+        return request;
     }
 
     @GET
     @Path("/result/{id}")
-    public ResultResponseDTO result(@PathParam("id") Long id) {
+    public DogWeatherRequest result(@PathParam("id") Long id) {
         DogWeatherRequest request = service.getResult(id);
         if (request == null) {
             throw new NotFoundException("Request not found");
@@ -48,18 +45,6 @@ public class DogCheckerResource {
         if (request.status != Status.DONE && request.status != Status.FAILED) {
             throw new WebApplicationException("Result not ready yet. Current status: " + request.status, 409);
         }
-        return new ResultResponseDTO(
-                request.id,
-                request.breed,
-                request.city,
-                request.status.name(),
-                request.suitability != null ? request.suitability.name() : null,
-                request.reason,
-                request.matchedBreed,
-                request.matchedCity,
-                request.temperature,
-                request.humidity,
-                request.breedInfo
-        );
+        return request;
     }
 }
