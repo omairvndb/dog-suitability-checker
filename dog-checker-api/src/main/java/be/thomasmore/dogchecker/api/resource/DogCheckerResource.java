@@ -21,6 +21,9 @@ public class DogCheckerResource {
     @POST
     @Path("/check")
     public CheckResponseDTO check(CheckRequestDTO dto) {
+        if (dto.breed() == null || dto.breed().isBlank() || dto.city() == null || dto.city().isBlank()) {
+            throw new WebApplicationException("Both 'breed' and 'city' are required.", 400);
+        }
         DogWeatherRequest request = service.createCheck(dto);
         return new CheckResponseDTO(request.id, request.status.name());
     }
