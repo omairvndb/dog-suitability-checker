@@ -8,11 +8,9 @@ import be.thomasmore.dogchecker.worker.service.SuitabilityService.SuitabilityRes
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 import java.util.List;
 
@@ -25,21 +23,13 @@ public class CheckRequestService {
     MeterRegistry registry;
 
     @Inject
-    @RestClient
-    DogApiClient dogApiClient;
+    DogApiService dogApiService;
 
     @Inject
-    @RestClient
-    WeatherApiClient weatherApiClient;
+    WeatherApiService weatherApiService;
 
     @Inject
     SuitabilityService suitabilityService;
-
-    @ConfigProperty(name = "dogs.api.key")
-    String dogsApiKey;
-
-    @ConfigProperty(name = "weather.api.key")
-    String weatherApiKey;
 
     @Channel("check-response")
     Emitter<WorkerResponseDTO> emitter;
@@ -50,9 +40,8 @@ public class CheckRequestService {
                 request.requestId(), request.breed(), request.city());
 
         try {
-            // Call Dogs API
-            // Note: The API always returns a JSON array, so we just take the first match
-            List<DogApiResponseDTO> dogs = dogApiClient.getBreed(request.breed(), dogsApiKey);
+            // Call Dogs API (with retry + fallback)
+            List<DogApiResponseDTO> dogs = dogApiService.fetchBreed(request.breed());
             if (dogs == null || dogs.isEmpty()) {
                 emitter.send(new WorkerResponseDTO(request.requestId(), "FAILED",
                         "Dog breed '" + request.breed() + "' not found."));
@@ -60,8 +49,8 @@ public class CheckRequestService {
             }
             DogApiResponseDTO dog = dogs.get(0);
 
-            // Call Weather API
-            WeatherApiResponseDTO weather = weatherApiClient.getWeather(weatherApiKey, request.city());
+            // Call Weather API (with retry + fallback)
+            WeatherApiResponseDTO weather = weatherApiService.fetchWeather(request.city());
             if (weather == null || weather.current == null) {
                 emitter.send(new WorkerResponseDTO(request.requestId(), "FAILED",
                         "City '" + request.city() + "' not found."));
@@ -71,10 +60,7 @@ public class CheckRequestService {
             // Evaluate suitability
             SuitabilityResult result = suitabilityService.evaluate(
                     dog.coatLength, dog.energy, weather.current.tempC);
-        
-            // Increment the processed checks counter with the suitability as a tag
-            // This allows us to track how many checks resulted in each suitability category
-            // Example output: dog.checks.processed{Suitability=GOOD} 10, dog.checks.processed{Suitability=BAD} 5, etc.
+
             registry.counter("dog.checks.processed", "suitability", result.suitability()).increment();
 
             emitter.send(new WorkerResponseDTO(request.requestId(), result.suitability(), result.reason()));
