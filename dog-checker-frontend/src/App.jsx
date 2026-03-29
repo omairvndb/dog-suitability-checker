@@ -75,18 +75,12 @@ function App() {
               Pawsitive Match
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed font-medium">
-              We check if your dream dog breed thrives in your local climate. Give us the details, we'll give you the verdict.
+              We check if your dream dog breed thrives in your local climate. <br />
+              Give us the details, we'll give you the verdict.
             </p>
           </div>
 
           <SuitabilityForm onSubmit={handleSubmit} loading={loading} />
-
-          {loading && (
-            <div className="mt-8 flex items-center gap-3 text-[#2A2A2A] font-semibold animate-pulse">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Analyzing climate data...
-            </div>
-          )}
 
           {error && (
             <div className="mt-8 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg rounded-l-none px-5 py-4 text-sm font-medium shadow-sm">
@@ -96,7 +90,7 @@ function App() {
         </div>
 
         {/* Right Pane (Dynamic Result) */}
-        <div className="w-full md:w-1/2 p-4 md:p-6 lg:p-8 flex items-center justify-center relative">
+        <div className="w-full md:w-1/2 p-4 md:p-6 lg:p-8 flex items-center justify-center relative min-h-[600px] md:min-h-0">
           <div className="absolute inset-0 bg-[#161616] rounded-4xl m-2 shadow-inner overflow-hidden">
             {/* Soft background glow based on result */}
             {result && (
@@ -113,7 +107,7 @@ function App() {
                 <AnalysisResult result={result} />
               ) : (
                 <div className="flex flex-col items-center justify-center text-center h-full text-gray-400">
-                  <div className="w-20 h-20 mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 shadow-lg">
+                  <div className="w-20 h-20 mb-6 rounded-full bg-white/5 flex items-center justify-center shadow-lg">
                     <PawPrint className="w-8 h-8 text-white/80" />
                   </div>
                   <h2 className="text-2xl font-bold text-white mb-2">Awaiting Context</h2>

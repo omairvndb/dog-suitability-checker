@@ -1,10 +1,10 @@
-import { Check, AlertTriangle, X, Dna } from "lucide-react";
+import { Dna } from "lucide-react";
 
 // Configuration for the different suitability states
 const suitabilityConfig = {
-  GOOD: { icon: <Check className="w-6 h-6" />, color: "text-green-400", bgIcon: "bg-green-500/20 text-green-400 border-green-500/30" },
-  MODERATE: { icon: <AlertTriangle className="w-6 h-6" />, color: "text-yellow-400", bgIcon: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
-  BAD: { icon: <X className="w-6 h-6" />, color: "text-red-400", bgIcon: "bg-red-500/20 text-red-400 border-red-500/30" },
+  GOOD: { color: "text-green-400" },
+  MODERATE: { color: "text-yellow-400" },
+  BAD: { color: "text-red-400" },
 };
 
 // Renders a 1-5 rating as filled and empty circles
@@ -41,41 +41,35 @@ const traits = [
 ];
 
 function AnalysisResult({ result }) {
-  const { icon, color, bgIcon } =
+  const { color } =
     suitabilityConfig[result.suitability] || suitabilityConfig.BAD;
 
   const breedInfo = result.breedInfo;
 
   return (
-    <div className="text-white w-full h-full flex flex-col pt-2 md:pt-4">
-      
+    <div className="text-white w-full h-full flex flex-col">
       {/* Header section with Verdict Summary */}
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-1.5 tracking-tight text-white/90">
-            Suitability Analysis
-          </h2>
-          {(result.matchedBreed || result.matchedCity) && (
-            <p className="text-gray-400 text-sm md:text-base font-medium">
-              <span className="text-white">{result.matchedBreed || result.breed}</span> in <span className="text-white">{result.matchedCity || result.city}</span>
-            </p>
-          )}
-        </div>
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 text-xl font-extrabold ${bgIcon} shadow-lg shrink-0 ml-4`}>
-          {icon}
-        </div>
+      <div className="mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold mb-1.5 tracking-tight text-white/90">
+          Suitability Analysis
+        </h2>
+        {(result.matchedBreed || result.matchedCity) && (
+          <p className="text-gray-400 text-sm md:text-base font-medium">
+            <span className="text-white">{result.matchedBreed || result.breed}</span> in <span className="text-white">{result.matchedCity || result.city}</span>
+          </p>
+        )}
       </div>
 
       <div className="grow flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-4">
         {/* Main Verdict block */}
         <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-           <div className="flex flex-wrap items-center justify-between gap-4 mb-4 border-b border-white/10 pb-4">
+           <div className="flex flex-wrap items-center justify-between gap-4 pb-4">
              <span className={`text-xl font-extrabold uppercase tracking-widest ${color}`}>
                {result.suitability}
              </span>
              {result.temperature != null && (
                <span className="text-gray-400 text-xs font-mono bg-white/10 px-3 py-1.5 rounded-lg border border-white/5">
-                 {result.temperature}&deg;C &bull; {result.humidity}% humidity
+                 Current: {result.temperature}&deg;C &bull; {result.humidity}% humidity
                </span>
              )}
            </div>
@@ -87,8 +81,7 @@ function AnalysisResult({ result }) {
 
         {/* Breed details section */}
         {breedInfo && (
-          <div className="mt-2 text-white px-1">
-            
+          <div>
             {/* Optional Breed Image */}
             {breedInfo.imageLink && (
               <div className="mb-6 w-full h-40 md:h-48 rounded-3xl overflow-hidden border border-white/10 relative shadow-xl">
@@ -103,11 +96,16 @@ function AnalysisResult({ result }) {
 
             {/* Traits grid */}
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-              <div className="flex items-center gap-3 mb-5 border-b border-white/10 pb-3">
-                <Dna className="w-5 h-5 text-white/70" />
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  Breed Characteristics
-                </h4>
+              <div className="pb-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Dna className="w-5 h-5 text-white/70" />
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                    Breed Characteristics
+                  </h4>
+                </div>
+                <p className="text-sm text-gray-400 leading-relaxed md:pr-4">
+                  Beyond climate, everyday compatibility matters. Review these typical traits to see if this breed aligns with your lifestyle, household, and experience level.
+                </p>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
@@ -121,11 +119,9 @@ function AnalysisResult({ result }) {
                 ))}
               </div>
             </div>
-
           </div>
         )}
       </div>
-
     </div>
   );
 }
