@@ -206,7 +206,7 @@ WEATHER_API_KEY=your_weather_api_key_here
 
 ### Production Mode (Docker)
 
-Runs everything in containers with a single command:
+Builds everything from source and runs it in containers — no pre-build needed:
 
 ```bash
 docker compose up --build
