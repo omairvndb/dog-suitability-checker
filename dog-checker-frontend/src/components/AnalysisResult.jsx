@@ -68,25 +68,21 @@ function AnalysisResult({ result }) {
 
       <div className="grow flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-4">
         {/* Main Verdict block */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 pl-8 backdrop-blur-md relative overflow-hidden group">
-           <div className="absolute top-0 left-0 w-2 h-full bg-current opacity-40 group-hover:opacity-100 transition-opacity" style={{ color: color.replace('text-', '') }} />
-           
-           <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
+           <div className="flex flex-wrap items-center justify-between gap-4 mb-4 border-b border-white/10 pb-4">
              <span className={`text-xl font-extrabold uppercase tracking-widest ${color}`}>
                {result.suitability}
              </span>
              {result.temperature != null && (
-               <span className="text-gray-400 text-xs font-mono bg-white/10 px-2.5 py-1.5 rounded-lg border border-white/5">
+               <span className="text-gray-400 text-xs font-mono bg-white/10 px-3 py-1.5 rounded-lg border border-white/5">
                  {result.temperature}&deg;C &bull; {result.humidity}% humidity
                </span>
              )}
            </div>
            
-           <div>
-             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-               {result.reason}
-             </p>
-           </div>
+           <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+             {result.reason}
+           </p>
         </div>
 
         {/* Breed details section */}
