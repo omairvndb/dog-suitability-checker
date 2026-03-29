@@ -55,9 +55,11 @@ function AnalysisResult({ result }) {
           <h2 className="text-2xl md:text-3xl font-bold mb-1.5 tracking-tight text-white/90">
             Suitability Analysis
           </h2>
-          <p className="text-gray-400 text-sm md:text-base font-medium">
-            in <span className="text-white">{result.matchedCity || result.city}</span>
-          </p>
+          {(result.matchedBreed || result.matchedCity) && (
+            <p className="text-gray-400 text-sm md:text-base font-medium">
+              <span className="text-white">{result.matchedBreed || result.breed}</span> in <span className="text-white">{result.matchedCity || result.city}</span>
+            </p>
+          )}
         </div>
         <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 text-xl font-extrabold ${bgIcon} shadow-lg shrink-0 ml-4`}>
           {icon}
@@ -65,12 +67,11 @@ function AnalysisResult({ result }) {
       </div>
 
       <div className="grow flex flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar pb-4">
-        
         {/* Main Verdict block */}
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md relative overflow-hidden group">
-           <div className="absolute top-0 left-0 w-2 h-full bg-current opacity-30 group-hover:opacity-100 transition-opacity" style={{ color: color.replace('text-', '') }} />
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 pl-8 backdrop-blur-md relative overflow-hidden group">
+           <div className="absolute top-0 left-0 w-2 h-full bg-current opacity-40 group-hover:opacity-100 transition-opacity" style={{ color: color.replace('text-', '') }} />
            
-           <div className="flex flex-wrap items-center gap-3 mb-3 pl-2">
+           <div className="flex flex-wrap items-center gap-3 mb-4">
              <span className={`text-xl font-extrabold uppercase tracking-widest ${color}`}>
                {result.suitability}
              </span>
@@ -81,11 +82,8 @@ function AnalysisResult({ result }) {
              )}
            </div>
            
-           <div className="pl-2">
-             <h3 className="text-xl font-semibold text-white mb-2">
-               {result.matchedBreed || result.breed}
-             </h3>
-             <p className="text-gray-300 text-sm leading-relaxed">
+           <div>
+             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
                {result.reason}
              </p>
            </div>
