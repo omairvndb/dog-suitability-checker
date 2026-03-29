@@ -2,7 +2,7 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 COPY . .
-RUN ./mvnw package -DskipTests
+RUN sed -i 's/\r$//' mvnw && sh mvnw package -DskipTests
 
 # Stage 2: Run with lightweight JRE
 FROM eclipse-temurin:21-jre
