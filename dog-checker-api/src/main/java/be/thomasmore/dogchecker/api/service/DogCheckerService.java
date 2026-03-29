@@ -15,6 +15,7 @@ import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Status;
 import be.thomasmore.dogchecker.api.entity.DogWeatherRequest.Suitability;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
@@ -39,6 +40,10 @@ public class DogCheckerService {
 
     @Transactional
     public DogWeatherRequest createCheck(CheckRequestDTO dto) {
+        if (dto.breed() == null || dto.breed().isBlank() || dto.city() == null || dto.city().isBlank()) {
+            throw new WebApplicationException("Both 'breed' and 'city' are required.", 400);
+        }
+
         DogWeatherRequest request = new DogWeatherRequest();
         request.breed = dto.breed();
         request.city = dto.city();
