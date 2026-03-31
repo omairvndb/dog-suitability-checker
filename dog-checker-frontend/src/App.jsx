@@ -56,14 +56,6 @@ function App() {
     }
   };
 
-  // Determine accent color for the right pane if we have a result
-  let accentColor = "bg-transparent";
-  if (result) {
-    if (result.suitability === "GOOD") accentColor = "bg-green-500 shadow-[0_0_80px_rgba(34,197,94,0.3)]";
-    else if (result.suitability === "MODERATE") accentColor = "bg-yellow-400 shadow-[0_0_80px_rgba(250,204,21,0.3)]";
-    else if (result.suitability === "BAD") accentColor = "bg-red-500 shadow-[0_0_80px_rgba(239,68,68,0.3)]";
-  }
-
   return (
     <div className="min-h-screen bg-[#EAE8E3] flex items-center justify-center p-4 sm:p-8 font-sans">
       <div className="w-full max-w-[1100px] h-auto min-h-[700px] bg-[#F5F4F0] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border-4 border-white/60">
