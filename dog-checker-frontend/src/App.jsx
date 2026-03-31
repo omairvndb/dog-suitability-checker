@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#EAE8E3] flex items-center justify-center p-4 sm:p-8 font-sans">
-      <div className="w-full max-w-[1100px] h-auto min-h-[700px] bg-[#F5F4F0] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border-4 border-white/60">
+      <div className="w-full max-w-275 h-auto min-h-175 bg-[#F5F4F0] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border-4 border-white/60">
         
         {/* Left Pane (Context & Form) */}
         <div className="w-full md:w-1/2 p-10 lg:p-14 flex flex-col justify-center relative z-10">
@@ -82,7 +82,7 @@ function App() {
         </div>
 
         {/* Right Pane (Dynamic Result) */}
-        <div className="w-full md:w-1/2 p-4 md:p-6 lg:p-8 flex items-center justify-center relative min-h-[600px] md:min-h-0">
+        <div className="w-full md:w-1/2 p-4 md:p-6 lg:p-8 flex items-center justify-center relative min-h-150 md:min-h-0">
           <div className="absolute inset-0 bg-[#161616] rounded-4xl m-2 shadow-inner overflow-hidden">
             {/* Soft background glow based on result */}
             {result && (
@@ -103,7 +103,7 @@ function App() {
                     <PawPrint className="w-8 h-8 text-white/80" />
                   </div>
                   <h2 className="text-2xl font-bold text-white mb-2">Awaiting Context</h2>
-                  <p className="text-gray-500 text-sm max-w-[250px] leading-relaxed">
+                  <p className="text-gray-500 text-sm max-w-62.5 leading-relaxed">
                     Submit the form to generate a localized suitability profile.
                   </p>
                 </div>
