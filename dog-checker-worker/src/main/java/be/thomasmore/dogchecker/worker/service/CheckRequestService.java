@@ -41,7 +41,7 @@ public class CheckRequestService {
                 request.requestId(), request.breed(), request.city());
 
         try {
-            // Call Dogs API (with retry + fallback)
+            // Call Dogs API
             List<DogApiResponseDTO> dogs = dogApiService.fetchBreed(request.breed());
             if (dogs == null || dogs.isEmpty()) {
                 emitter.send(failedResponse(request.requestId(),
@@ -50,7 +50,7 @@ public class CheckRequestService {
             }
             DogApiResponseDTO dog = dogs.get(0);
 
-            // Call Weather API (with retry + fallback)
+            // Call Weather API
             WeatherApiResponseDTO weather = weatherApiService.fetchWeather(request.city());
             if (weather == null || weather.current == null) {
                 emitter.send(failedResponse(request.requestId(),
