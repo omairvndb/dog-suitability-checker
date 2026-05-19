@@ -8,6 +8,12 @@ A school project built to learn **microservice architecture** with **Quarkus**, 
 
 The system checks whether a dog breed is suitable for the current weather in a given city. Submit a breed and city, and the system fetches real-time weather data and breed characteristics to evaluate suitability using a scoring-based algorithm, returning a verdict of GOOD, MODERATE, or BAD.
 
+## Screenshots
+
+![Good result](screenshot-good-result-1.png)
+![Good result with breed info](screenshot-good-result-2.png)
+![Bad result](screenshot-bad-result.png)
+
 ## Key Concepts
 
 - Splitting a system into separate microservices communicating via message queues
