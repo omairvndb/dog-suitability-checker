@@ -49,7 +49,7 @@ The system checks whether a dog breed is suitable for the current weather in a g
 | Layer           | Technology                              |
 |-----------------|----------------------------------------|
 | Framework       | Quarkus 3.x (Java 21)                  |
-| REST            | RESTEasy Reactive + Jackson             |
+| REST            | RESTEasy Classic + Jackson              |
 | ORM             | Hibernate ORM with Panache              |
 | Database        | PostgreSQL                              |
 | Messaging       | SmallRye Reactive Messaging + AMQP (Artemis) |
@@ -142,7 +142,7 @@ Check the status of a request.
 ```bash
 curl http://localhost:8080/status/1
 ```
-Response: `{"id": 1, "status": "PENDING|PROCESSING|DONE|FAILED"}`
+Response: `{"id": 1, "status": "PENDING|DONE|FAILED"}`
 
 ### GET /result/{id}
 Get the full result (only available when status is DONE or FAILED).
@@ -157,7 +157,26 @@ Response:
   "city": "Brussels",
   "status": "DONE",
   "suitability": "GOOD",
-  "reason": "High-energy dogs thrive in moderate, cool climates perfect for outdoor activity."
+  "reason": "Thick coat is well suited for cool weather. Moderate climate is great for an active dog.",
+  "matchedBreed": "Labrador Retriever",
+  "matchedCity": "Brussels, Belgium",
+  "temperature": 12.4,
+  "humidity": 71,
+  "breedInfo": {
+    "imageLink": "https://api-ninjas.com/images/dogs/labrador_retriever.jpg",
+    "goodWithChildren": 5,
+    "goodWithOtherDogs": 5,
+    "goodWithStrangers": 5,
+    "shedding": 4,
+    "grooming": 2,
+    "drooling": 2,
+    "coatLength": 1,
+    "playfulness": 5,
+    "protectiveness": 3,
+    "trainability": 5,
+    "energy": 5,
+    "barking": 3
+  }
 }
 ```
 
